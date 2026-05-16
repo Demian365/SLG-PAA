@@ -1,0 +1,158 @@
+# SLG-PAA: Spatiotemporal Language Guidance with Part-Aware Alignment for Skeleton-based Micro-Action Recognition
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Paper](https://img.shields.io/badge/Paper-Under%20Review-red.svg)](#)
+
+Official repository for the paper:
+
+**Spatiotemporal Language Guidance with Part-Aware Alignment for Skeleton-based Micro-Action Recognition**
+Tao Lu, Degui Xiao\*, Xingxing Xie, Chanthasith Phoutthihong, Yi Liu
+*College of Computer Science and Electronic Engineering, Hunan University*
+
+> 📌 **Status**: The paper is currently under peer review. The full training code, configs, and pretrained checkpoints will be released upon acceptance. This repository currently hosts the structured spatiotemporal text descriptions used by SLG-PAA, with the code release reserved for the final paper drop.
+
+---
+
+## 📖 Overview
+
+Skeleton-based micro-action recognition is challenging because discriminative cues are highly localized to a few body parts and depend on subtle dynamics within specific motion stages. Existing skeleton-based approaches mainly rely on category-level supervision, which provides limited guidance about *which body parts* and *which motion stages* are discriminative.
+
+To address this, we propose **SLG-PAA**, a language-guided training framework that supplies structured spatiotemporal priors through three components:
+
+1. **Spatiotemporal Prompt Design** — Prompt templates tailored to micro-action differences, generating complementary spatial-part and temporal-stage text descriptions for each action category.
+2. **Part-wise Temporal Stage Attention (PTSA)** — Selectively fuses the most relevant temporal-stage semantics into each part prototype on the text side.
+3. **Coarse-to-Part Semantic Gating (CPSG)** — Assigns differentiated alignment weights to body parts based on their discriminative contributions on the alignment side.
+
+The text branch serves **purely as a training-time supervisor** and adds **no inference cost**.
+
+### Highlights
+
+- 🎯 A language-guided framework tailored to skeleton-based micro-action recognition.
+- 🧩 **Spatiotemporal text prompts** capturing fine-grained micro-action cues (motion direction, contact location, velocity profile).
+- ⚖️ **Part-aware differentiated supervision** via CPSG.
+- ⚡ **Zero inference overhead** — the text branch is dropped at test time.
+- 🔌 **Encoder-agnostic** — consistent gains across multiple skeleton encoders.
+
+### Main Results on MA-52
+
+| Backbone | Modality     | F1<sub>mean</sub> Gain                                |
+| -------- | ------------ | ----------------------------------------------------- |
+| MMN      | Joint        | +1.51% ~ +1.95%                                       |
+| MMN      | Joint + Bone | **+2.54%** over the strongest skeleton-only baseline  |
+
+Full quantitative results will be available upon paper acceptance.
+
+---
+
+## 📂 Repository Structure
+
+```
+SLG-PAA/
+├── text_descriptions/
+│   ├── spatial-part_descriptions.csv     # 52 actions × {Global + 6 body regions}
+│   └── temporal-stage_descriptions.csv   # 52 actions × 3 temporal stages
+├── LICENSE
+└── README.md
+```
+
+The training code, configs, and pretrained checkpoints will be added to this repository upon paper acceptance.
+
+---
+
+## 📑 Text Descriptions
+
+### `text_descriptions/spatial-part_descriptions.csv`
+
+Per-action, per-body-region textual descriptions emphasizing **which body parts are involved and how they move spatially**.
+
+| Column         | Description                                                       |
+| -------------- | ----------------------------------------------------------------- |
+| `Action Label` | Action category name (52 in total, matches MA-52 official labels) |
+| `Global`       | Whole-body description of the action                              |
+| `Head`         | Description focused on the head                                   |
+| `Arms`         | Description focused on the arms                                   |
+| `Hands`        | Description focused on the hands                                  |
+| `Torso`        | Description focused on the torso                                  |
+| `Legs`         | Description focused on the legs                                   |
+| `Feet`         | Description focused on the feet                                   |
+
+**Example row** (`shaking body`):
+- *Global*: "The torso and head move together in a rhythmic, small-amplitude motion, first tilting slightly to the left or right and then returning to an upright position, while seated, with no noticeable movement of the arms, legs, or feet."
+- *Head*: "Head follows the torso with small left-right motion and minimal tilt."
+- *Arms*: "The arms remain relaxed and still, with no noticeable movement."
+
+Non-moving body parts get explicit "remains still" descriptions — this is *intentional* and is what enables the dispersion-based gating in CPSG.
+
+### `text_descriptions/temporal-stage_descriptions.csv`
+
+Per-action, per-stage textual descriptions emphasizing **how the motion unfolds across time**.
+
+| Column         | Description                                       |
+| -------------- | ------------------------------------------------- |
+| `Action Label` | Action category name (matches the file above)     |
+| `Stage 1`      | Onset / preparation phase                         |
+| `Stage 2`      | Peak / execution phase                            |
+| `Stage 3`      | Decay / return phase                              |
+
+**Example row** (`shaking body`):
+- *Stage 1*: "Head and torso subtly tense, ready to initiate oscillatory motion from a stable sitting position."
+- *Stage 2*: "Torso and head rapidly oscillate with small amplitude, achieving peak speed in a localized, rhythmic shaking."
+- *Stage 3*: "The oscillatory motion decelerates, and the head and torso return to a stable, stationary posture."
+
+### Loading the descriptions
+
+```python
+import csv
+
+def load_descriptions(path):
+    with open(path, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        return list(reader)
+
+spatial  = load_descriptions('text_descriptions/spatial-part_descriptions.csv')
+temporal = load_descriptions('text_descriptions/temporal-stage_descriptions.csv')
+
+# Access the "Head" description of the 0-th action
+print(spatial[0]['Head'])
+# -> "Head follows the torso with small left-right motion and minimal tilt."
+```
+
+In SLG-PAA, these descriptions are encoded by a frozen CLIP ViT-B/32 text encoder and consumed by the PTSA and CPSG modules during training.
+
+---
+
+## 📜 Citation
+
+If you find these descriptions or our work useful, please consider citing:
+
+```bibtex
+@article{lu2025slgpaa,
+  title   = {Spatiotemporal Language Guidance with Part-Aware Alignment for Skeleton-based Micro-Action Recognition},
+  author  = {Lu, Tao and Xiao, Degui and Xie, Xingxing and Phoutthihong, Chanthasith and Liu, Yi},
+  journal = {Under Review},
+  year    = {2025}
+}
+```
+
+The BibTeX entry will be updated once the paper is officially published.
+
+---
+
+## 🙏 Acknowledgments
+
+We thank the creators of the **MA-52** dataset for providing a high-quality benchmark for micro-action research, and the authors of MMN, CTR-GCN, SkateFormer, and CLIP whose open-source releases informed our implementation.
+
+---
+
+## 📧 Contact
+
+- Tao Lu — `lutao@hnu.edu.cn`
+- Degui Xiao (corresponding author) — `dgxiao@hnu.edu.cn`
+
+Or open an issue in this repository.
+
+---
+
+## ⚖️ License
+
+This project is licensed under the MIT License — see [LICENSE](LICENSE) for details. The MA-52 dataset has its own license; usage of the dataset must comply with the original terms set by its authors.
