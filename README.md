@@ -9,8 +9,6 @@ Official repository for the paper:
 Tao Lu, Degui Xiao\*, Xingxing Xie, Chanthasith Phoutthihong, Yi Liu
 *College of Computer Science and Electronic Engineering, Hunan University*
 
-> 📌 **Status**: The paper is currently under peer review. The full training code, configs, and pretrained checkpoints will be released upon acceptance. This repository currently hosts the structured spatiotemporal text descriptions used by SLG-PAA, with the code release reserved for the final paper drop.
-
 ---
 
 ## 📖 Overview
@@ -99,24 +97,6 @@ Per-action, per-stage textual descriptions emphasizing **how the motion unfolds 
 - *Stage 2*: "Torso and head rapidly oscillate with small amplitude, achieving peak speed in a localized, rhythmic shaking."
 - *Stage 3*: "The oscillatory motion decelerates, and the head and torso return to a stable, stationary posture."
 
-### Loading the descriptions
-
-```python
-import csv
-
-def load_descriptions(path):
-    with open(path, 'r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        return list(reader)
-
-spatial  = load_descriptions('text_descriptions/spatial-part_descriptions.csv')
-temporal = load_descriptions('text_descriptions/temporal-stage_descriptions.csv')
-
-# Access the "Head" description of the 0-th action
-print(spatial[0]['Head'])
-# -> "Head follows the torso with small left-right motion and minimal tilt."
-```
-
 In SLG-PAA, these descriptions are encoded by a frozen CLIP ViT-B/32 text encoder and consumed by the PTSA and CPSG modules during training.
 
 ---
@@ -141,15 +121,6 @@ The BibTeX entry will be updated once the paper is officially published.
 ## 🙏 Acknowledgments
 
 We thank the creators of the **MA-52** dataset for providing a high-quality benchmark for micro-action research, and the authors of MMN, CTR-GCN, SkateFormer, and CLIP whose open-source releases informed our implementation.
-
----
-
-## 📧 Contact
-
-- Tao Lu — `lutao@hnu.edu.cn`
-- Degui Xiao (corresponding author) — `dgxiao@hnu.edu.cn`
-
-Or open an issue in this repository.
 
 ---
 
