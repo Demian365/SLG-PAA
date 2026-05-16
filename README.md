@@ -27,20 +27,10 @@ The text branch serves **purely as a training-time supervisor** and adds **no in
 
 ### Highlights
 
-- 🎯 A language-guided framework tailored to skeleton-based micro-action recognition.
-- 🧩 **Spatiotemporal text prompts** capturing fine-grained micro-action cues (motion direction, contact location, velocity profile).
-- ⚖️ **Part-aware differentiated supervision** via CPSG.
-- ⚡ **Zero inference overhead** — the text branch is dropped at test time.
-- 🔌 **Encoder-agnostic** — consistent gains across multiple skeleton encoders.
-
-### Main Results on MA-52
-
-| Backbone | Modality     | F1<sub>mean</sub> Gain                                |
-| -------- | ------------ | ----------------------------------------------------- |
-| MMN      | Joint        | +1.51% ~ +1.95%                                       |
-| MMN      | Joint + Bone | **+2.54%** over the strongest skeleton-only baseline  |
-
-Full quantitative results will be available upon paper acceptance.
+- 🎯 First language-guided training framework for skeleton-based micro-action recognition.
+- 🧩 Tailored spatiotemporal prompts inject fine-grained micro-action priors.
+- ⚖️ Part-wise temporal-stage attention and coarse-to-part gating align text and skeleton.
+- ⚡ Achieves +2.54% F1 over the strongest skeleton-only baseline on the MA-52 dataset.
 
 ---
 
@@ -55,7 +45,7 @@ SLG-PAA/
 └── README.md
 ```
 
-The training code, configs, and pretrained checkpoints will be added to this repository upon paper acceptance.
+Training code will be released soon.
 
 ---
 
@@ -81,8 +71,6 @@ Per-action, per-body-region textual descriptions emphasizing **which body parts 
 - *Head*: "Head follows the torso with small left-right motion and minimal tilt."
 - *Arms*: "The arms remain relaxed and still, with no noticeable movement."
 
-Non-moving body parts get explicit "remains still" descriptions — this is *intentional* and is what enables the dispersion-based gating in CPSG.
-
 ### `text_descriptions/temporal-stage_descriptions.csv`
 
 Per-action, per-stage textual descriptions emphasizing **how the motion unfolds across time**.
@@ -99,13 +87,11 @@ Per-action, per-stage textual descriptions emphasizing **how the motion unfolds 
 - *Stage 2*: "Torso and head rapidly oscillate with small amplitude, achieving peak speed in a localized, rhythmic shaking."
 - *Stage 3*: "The oscillatory motion decelerates, and the head and torso return to a stable, stationary posture."
 
-In SLG-PAA, these descriptions are encoded by a frozen CLIP ViT-B/32 text encoder and consumed by the PTSA and CPSG modules during training.
-
 ---
 
 ## 🙏 Acknowledgments
 
-We thank the creators of the **MA-52** dataset for providing a high-quality benchmark for micro-action research, and the authors of MMN, CTR-GCN, SkateFormer, and CLIP whose open-source releases informed our implementation.
+We thank the creators of the MA-52 dataset for providing a high-quality benchmark for micro-action research, and the authors of MMN for releasing their code, which our implementation builds upon.
 
 ---
 
