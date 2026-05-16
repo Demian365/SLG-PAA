@@ -101,23 +101,6 @@ In SLG-PAA, these descriptions are encoded by a frozen CLIP ViT-B/32 text encode
 
 ---
 
-## 📜 Citation
-
-If you find these descriptions or our work useful, please consider citing:
-
-```bibtex
-@article{lu2025slgpaa,
-  title   = {Spatiotemporal Language Guidance with Part-Aware Alignment for Skeleton-based Micro-Action Recognition},
-  author  = {Lu, Tao and Xiao, Degui and Xie, Xingxing and Phoutthihong, Chanthasith and Liu, Yi},
-  journal = {Under Review},
-  year    = {2025}
-}
-```
-
-The BibTeX entry will be updated once the paper is officially published.
-
----
-
 ## 🙏 Acknowledgments
 
 We thank the creators of the **MA-52** dataset for providing a high-quality benchmark for micro-action research, and the authors of MMN, CTR-GCN, SkateFormer, and CLIP whose open-source releases informed our implementation.
