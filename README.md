@@ -30,7 +30,6 @@ The text branch serves **purely as a training-time supervisor** and adds **no in
 - 🎯 First language-guided training framework for skeleton-based micro-action recognition.
 - 🧩 Tailored spatiotemporal prompts inject fine-grained micro-action priors.
 - ⚖️ Part-wise temporal-stage attention and coarse-to-part gating align text and skeleton.
-- ⚡ Achieves +2.54% F1 over the strongest skeleton-only baseline on the MA-52 dataset.
 
 ---
 
@@ -67,6 +66,7 @@ Per-action, per-body-region textual descriptions emphasizing **which body parts 
 | `Feet`         | Description focused on the feet                                   |
 
 **Example row** (`shaking body`):
+
 - *Global*: "The torso and head move together in a rhythmic, small-amplitude motion, first tilting slightly to the left or right and then returning to an upright position, while seated, with no noticeable movement of the arms, legs, or feet."
 - *Head*: "Head follows the torso with small left-right motion and minimal tilt."
 - *Arms*: "The arms remain relaxed and still, with no noticeable movement."
