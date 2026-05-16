@@ -6,7 +6,9 @@
 Official repository for the paper:
 
 **Spatiotemporal Language Guidance with Part-Aware Alignment for Skeleton-based Micro-Action Recognition**
+
 Tao Lu, Degui Xiao\*, Xingxing Xie, Chanthasith Phoutthihong, Yi Liu
+
 *College of Computer Science and Electronic Engineering, Hunan University*
 
 ---
